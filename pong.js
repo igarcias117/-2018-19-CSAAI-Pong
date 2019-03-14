@@ -47,6 +47,25 @@ function main()
   bola.init(ctx)
   bola.draw()
 
-  
+  var timer = null;
 
+  window.onkeydown = (e) => {
+     e.preventDefault();
+     if (e.key == ' ') {
+       if (!timer) {
+         timer = setInterval(()=>{
+            bola.update();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            bola.draw();
+            if (bola.x > canvas.width){
+              bola.v_x = -4;
+              bola.v_y = 1;
+            }else if (bola.y > canvas.height){
+              bola.v_x = 4;
+              bola.v_y = -1;
+            }
+          },20);
+        }
+    }
+  }
 }
