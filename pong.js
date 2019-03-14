@@ -9,30 +9,42 @@ function main()
   var ctx = canvas.getContext("2d");
 
   var bola = {
-    x_ini: 50;
-    y_ini: 50;
+    x_ini: 50,
+    y_ini: 50,
 
-    x: 0;
-    y: 0;
+    x: 0,
+    y: 0,
 
-    v_x: 4;
-    v_y: 1;
+    v_x: 4,
+    v_y: 1,
 
-    b_width: 5;
-    b_height: 5;
+    width: 5,
+    height: 5,
 
-    ctx: null;
+    ctx: null,
+
+    init: function(ctx) {
+      this.ctx = ctx;
+      this.reset();
+    },
 
     draw: function(){
-      this.ctx.fillStyle = white;
-      this.ctx.fillRect(this.x,this.y,this.b_width, this.b_height);
-    };
+      this.ctx.fillStyle = 'white';
+      this.ctx.fillRect(this.x,this.y,this.width, this.height);
+    },
 
-    ini: function(){
+    reset: function(){
       this.x = this.x_ini;
       this.y = this.y_ini;
-    };
+    },
 
+    update: function(){
+      this.x += this.v_x;
+      this.y += this.v_y;
+    }
   }
+
+  bola.init(ctx)
+  bola.draw()
 
 }
