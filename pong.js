@@ -47,4 +47,6 @@ function main()
   bola.init(ctx)
   bola.draw()
 
+  
+
 }
