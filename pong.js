@@ -51,15 +51,39 @@ function main()
     y_ini: 25,
 
     y: 0,
+    x: 0,
+
+    width: 7,
+    height: 30,
+
+    ctx : null,
+
+    v_y: 0,
 
     draw: function(){
-      tis.ctx.fillStyle = 'white';
-      this.ctx.fillRect()
+      this.ctx.fillStyle = 'white';
+      this.ctx.fillRect(this.x,this.y,this.width,this.height);
+    },
+
+    reset: function(){
+      this.x = this.x_ini;
+      this.y = this.y_ini;
+    },
+
+    init: function(ctx) {
+      this.ctx = ctx;
+      this.reset();
+    },
+
+    update: function(){
+      this.y += this.v_y;
     }
   }
 
   bola.init(ctx)
   bola.draw()
+  raqueta.init(ctx)
+  raqueta.draw()
 
   var timer = null;
 
@@ -69,8 +93,11 @@ function main()
        if (!timer) {
          timer = setInterval(()=>{
             bola.update();
+            raqueta.update();
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             bola.draw();
+            raqueta.draw();
+
             if (bola.x > canvas.width){
               bola.direction = "left";
               bola.v_x = -4;
@@ -94,6 +121,16 @@ function main()
               bola.direction = "right";
               bola.v_x = 4;
             }
+
+            window.onkeydown = (e) => {
+              e.preventDefault();
+              if(e.key == 'w'){
+                raqueta.v_y = -6;
+              }else if(e.key == 's'){
+                raqueta.v_y = 6;
+              }
+            }
+
           },20);
         }
     }
