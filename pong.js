@@ -46,44 +46,50 @@ function main()
     }
   }
 
-  var raqueta = {
-    x_ini: 40,
-    y_ini: 25,
 
-    y: 0,
-    x: 0,
+  function raqueta(raqueta_pos_inix, raqueta_pos_iniy){
+    this.x_ini = raqueta_pos_inix;
+    this.y_ini = raqueta_pos_iniy;
 
-    width: 7,
-    height: 30,
+    this.y = 0;
+    this.x = 0;
 
-    ctx : null,
+    this.width = 7;
+    this.height = 30;
 
-    v_y: 0,
+    this.ctx = null;
 
-    draw: function(){
+    this.v_y = 0;
+
+    this.draw = function(){
       this.ctx.fillStyle = 'white';
       this.ctx.fillRect(this.x,this.y,this.width,this.height);
-    },
+    };
 
-    reset: function(){
+    this.reset = function(){
       this.x = this.x_ini;
       this.y = this.y_ini;
-    },
+    };
 
-    init: function(ctx) {
+    this.init = function(ctx) {
       this.ctx = ctx;
       this.reset();
-    },
+    };
 
-    update: function(){
+    this.update = function(){
       this.y += this.v_y;
-    }
+    };
   }
+
+  var j1 = new raqueta(40,30)
+  var j2 = new raqueta(553,340)
 
   bola.init(ctx)
   bola.draw()
-  raqueta.init(ctx)
-  raqueta.draw()
+  j1.init(ctx)
+  j2.init(ctx)
+  j1.draw()
+  j2.draw()
 
   var timer = null;
 
@@ -117,7 +123,7 @@ function main()
                 bola.v_x = -4;
                 bola.v_y = 1;
               }
-            }else if(bola.x < 0){
+            }else if(bola.x < 0 || (bola.y > raqueta.y && bola.y < raqueta.y+raqueta.height && bola.x < raqueta.x)){
               bola.direction = "right";
               bola.v_x = 4;
             }
@@ -125,9 +131,10 @@ function main()
             window.onkeydown = (e) => {
               e.preventDefault();
               if(e.key == 'w'){
-                raqueta.v_y = -6;
+                raqueta.y = raqueta.y - 7;
               }else if(e.key == 's'){
-                raqueta.v_y = 6;
+                raqueta.y = raqueta.y + 7;
+                console.log(raqueta.y);
               }
             }
 
