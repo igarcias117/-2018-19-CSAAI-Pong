@@ -23,6 +23,8 @@ function main()
 
     ctx: null,
 
+    direction:"right",
+
     init: function(ctx) {
       this.ctx = ctx;
       this.reset();
@@ -44,6 +46,18 @@ function main()
     }
   }
 
+  var raqueta = {
+    x_ini: 40,
+    y_ini: 25,
+
+    y: 0,
+
+    draw: function(){
+      tis.ctx.fillStyle = 'white';
+      this.ctx.fillRect()
+    }
+  }
+
   bola.init(ctx)
   bola.draw()
 
@@ -58,11 +72,27 @@ function main()
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             bola.draw();
             if (bola.x > canvas.width){
+              bola.direction = "left";
               bola.v_x = -4;
-              bola.v_y = 1;
             }else if (bola.y > canvas.height){
+              if(bola.direction == "right"){
+                bola.v_x = 4;
+                bola.v_y = -1;
+              }else if(bola.direction == "left"){
+                bola.v_x = -4;
+                bola.v_y = -1;
+              }
+            }else if (bola.y < 0){
+              if(bola.direction == "right"){
+                bola.v_x = 4;
+                bola.v_y = 1;
+              }else if(bola.direction == "left"){
+                bola.v_x = -4;
+                bola.v_y = 1;
+              }
+            }else if(bola.x < 0){
+              bola.direction = "right";
               bola.v_x = 4;
-              bola.v_y = -1;
             }
           },20);
         }
