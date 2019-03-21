@@ -55,7 +55,7 @@ function main()
     this.x = 0;
 
     this.width = 7;
-    this.height = 30;
+    this.height = 40;
 
     this.ctx = null;
 
@@ -76,9 +76,6 @@ function main()
       this.reset();
     };
 
-    this.update = function(){
-      this.y += this.v_y;
-    };
   }
 
   var j1 = new raqueta(40,30)
@@ -99,12 +96,13 @@ function main()
        if (!timer) {
          timer = setInterval(()=>{
             bola.update();
-            raqueta.update();
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             bola.draw();
-            raqueta.draw();
+            j1.draw();
+            j2.draw();
 
-            if (bola.x > canvas.width){
+            if (bola.x > canvas.width ||
+               (bola.y > j2.y && bola.y < j2.y+j2.height && bola.x > j2.x)){
               bola.direction = "left";
               bola.v_x = -4;
             }else if (bola.y > canvas.height){
@@ -123,7 +121,8 @@ function main()
                 bola.v_x = -4;
                 bola.v_y = 1;
               }
-            }else if(bola.x < 0 || (bola.y > raqueta.y && bola.y < raqueta.y+raqueta.height && bola.x < raqueta.x)){
+            }else if(bola.x < 0 ||
+             (bola.y > j1.y && bola.y < j1.y+j1.height && bola.x < j1.x+j1.width)){
               bola.direction = "right";
               bola.v_x = 4;
             }
@@ -131,10 +130,22 @@ function main()
             window.onkeydown = (e) => {
               e.preventDefault();
               if(e.key == 'w'){
-                raqueta.y = raqueta.y - 7;
+                j1.y = j1.y - 7;
               }else if(e.key == 's'){
-                raqueta.y = raqueta.y + 7;
-                console.log(raqueta.y);
+                j1.y = j1.y + 7;
+              }else if(e.key == 'ArrowUp'){
+                j2.y = j2.y - 7;
+              }else if(e.key == 'ArrowDown'){
+                j2.y = j2.y + 7;
+              }
+              if(j1.y < 0){
+                j1.y = 0;
+              }else if(j1.y + j1.height > canvas.height){
+                j1.y = canvas.height - j1.height;
+              }else if(j2.y < 0){
+                j2.y = 0;
+              }else if(j2.y + j2.height > canvas.height){
+                j2.y = canvas.height - j2.height;
               }
             }
 
