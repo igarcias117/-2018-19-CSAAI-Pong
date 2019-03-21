@@ -8,6 +8,32 @@ function main()
 
   var ctx = canvas.getContext("2d");
 
+  /*function puntos(puntos_ini_x, puntos_ini_y){
+    ctx = null;
+
+    this.puntuacion = 0;
+
+    this.puntos_x = puntos_ini_x;
+    this.puntos_y = puntos_ini_y;
+
+    this.init = function(ctx){
+      this.ctx = ctx;
+    }
+
+    this.drawn = function(){
+      ctx.strokeStyle = 'grey';
+      ctx.font = "35px Arial";
+      ctx.strokeText(this.puntuacion,200,200);
+    }
+  }*/
+
+  ctx.setLineDash([11, 7]);
+  ctx.moveTo(300, 0);
+  ctx.lineTo(300, 400);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = 'green';
+  ctx.stroke();
+
   var bola = {
     x_ini: 50,
     y_ini: 50,
@@ -31,7 +57,7 @@ function main()
     },
 
     draw: function(){
-      this.ctx.fillStyle = 'white';
+      this.ctx.fillStyle = 'orange';
       this.ctx.fillRect(this.x,this.y,this.width, this.height);
     },
 
@@ -62,7 +88,7 @@ function main()
     this.v_y = 0;
 
     this.draw = function(){
-      this.ctx.fillStyle = 'white';
+      this.ctx.fillStyle = 'orange';
       this.ctx.fillRect(this.x,this.y,this.width,this.height);
     };
 
@@ -75,11 +101,11 @@ function main()
       this.ctx = ctx;
       this.reset();
     };
-
   }
 
   var j1 = new raqueta(40,30)
   var j2 = new raqueta(553,340)
+  /*var puntos_j1 = new puntos(200,200)*/
 
   bola.init(ctx)
   bola.draw()
@@ -100,6 +126,11 @@ function main()
             bola.draw();
             j1.draw();
             j2.draw();
+            ctx.setLineDash([11, 7]);
+            ctx.moveTo(300, 0);
+            ctx.lineTo(300, 400);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'green';
 
             if (bola.x > canvas.width ||
                (bola.y > j2.y && bola.y < j2.y+j2.height && bola.x > j2.x)){
@@ -148,8 +179,7 @@ function main()
                 j2.y = canvas.height - j2.height;
               }
             }
-
-          },20);
+          },25);
         }
     }
   }
