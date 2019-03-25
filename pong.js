@@ -8,32 +8,23 @@ function main()
 
   var ctx = canvas.getContext("2d");
 
-  /*function puntos(puntos_ini_x, puntos_ini_y){
-    ctx = null;
-
-    this.puntuacion = 0;
-
-    this.puntos_x = puntos_ini_x;
-    this.puntos_y = puntos_ini_y;
-
-    this.init = function(ctx){
-      this.ctx = ctx;
+//dibujar el marcador
+    function drawscoreboard() {
+      ctx.font = "50px Arial";
+      ctx.fillText(j1.puntos, canvas.width/4, 40)
+      ctx.font = "50px Arial";
+      ctx.fillText(j2.puntos, 3*canvas.width/4 -30, 40)
     }
 
-    this.drawn = function(){
-      ctx.strokeStyle = 'grey';
-      ctx.font = "35px Arial";
-      ctx.strokeText(this.puntuacion,200,200);
-    }
-  }*/
+//lineas que separan el campo
+    ctx.setLineDash([11, 7]);
+    ctx.moveTo(300, 0);
+    ctx.lineTo(300, 400);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'green';
+    ctx.stroke();
 
-  ctx.setLineDash([11, 7]);
-  ctx.moveTo(300, 0);
-  ctx.lineTo(300, 400);
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = 'green';
-  ctx.stroke();
-
+//la bola
   var bola = {
     x_ini: 50,
     y_ini: 50,
@@ -72,7 +63,7 @@ function main()
     }
   }
 
-
+//la raqueta
   function raqueta(raqueta_pos_inix, raqueta_pos_iniy){
     this.x_ini = raqueta_pos_inix;
     this.y_ini = raqueta_pos_iniy;
@@ -85,7 +76,7 @@ function main()
 
     this.ctx = null;
 
-    this.v_y = 0;
+    this.puntos = 0;
 
     this.draw = function(){
       this.ctx.fillStyle = 'orange';
@@ -105,15 +96,18 @@ function main()
 
   var j1 = new raqueta(40,30)
   var j2 = new raqueta(553,340)
-  /*var puntos_j1 = new puntos(200,200)*/
+  var puntuacion_max = 5
 
+//iniciar y dibujar el juego
   bola.init(ctx)
   bola.draw()
   j1.init(ctx)
   j2.init(ctx)
   j1.draw()
   j2.draw()
+  drawscoreboard()
 
+//el funcionamiento del juego
   var timer = null;
 
   window.onkeydown = (e) => {
@@ -126,16 +120,24 @@ function main()
             bola.draw();
             j1.draw();
             j2.draw();
+            drawscoreboard()
+
+            //lineas que separan el campo
             ctx.setLineDash([11, 7]);
             ctx.moveTo(300, 0);
             ctx.lineTo(300, 400);
             ctx.lineWidth = 2;
             ctx.strokeStyle = 'green';
+            ctx.stroke();
 
+            //movimientos de la bola
             if (bola.x > canvas.width ||
                (bola.y > j2.y && bola.y < j2.y+j2.height && bola.x > j2.x)){
               bola.direction = "left";
               bola.v_x = -4;
+              if(bola.x > canvas.width){
+                j1.puntos += 1;
+              }
             }else if (bola.y > canvas.height){
               if(bola.direction == "right"){
                 bola.v_x = 4;
@@ -156,8 +158,12 @@ function main()
              (bola.y > j1.y && bola.y < j1.y+j1.height && bola.x < j1.x+j1.width)){
               bola.direction = "right";
               bola.v_x = 4;
+              if(bola.x < 0){
+                j2.puntos += 1;
+              }
             }
 
+            //movimiento de las raquetas
             window.onkeydown = (e) => {
               e.preventDefault();
               if(e.key == 'w'){
@@ -178,6 +184,15 @@ function main()
               }else if(j2.y + j2.height > canvas.height){
                 j2.y = canvas.height - j2.height;
               }
+            }
+
+            //terminar juego y reset
+            if (j1.puntos >= puntuacion_max || j2.puntos >= puntuacion_max) {
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+              clearInterval(timer)
+              ctx.fillText("GAME OVER", 120, 100)
+              ctx.font = "20px Impact"
+              timer = null;
             }
           },25);
         }
